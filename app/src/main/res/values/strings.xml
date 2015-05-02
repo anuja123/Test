@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Sante</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="app_id">833894540017917</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="drawer_open">MainActivity</string>
+    <string name="drawer_close">MainActivity</string>
+    <string name="action_search">Search</string>
+    <string-array name="Side_Menu">
+        <item> Sign Up</item>
+        <item> About Sante</item>
+        <item> Blogs </item>
+        <item> Share App</item>
+
+    </string-array>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
