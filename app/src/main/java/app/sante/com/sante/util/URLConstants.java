@@ -10,11 +10,11 @@ public interface URLConstants {
 
     public static final String RESOURCE_FORMAT = ".json";
 
-    public static final String GET_LOCALE_PLACES = "/locale/";
+    public static final String GET_LOCALE_PLACES = "/locale/Pubs/";
 
 
     //Testing
-    public static final String LOCALE_BLORE = "blore";
+    public static final String LOCALE_BLORE = "Pub1";
 
 
 

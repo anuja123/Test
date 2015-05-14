@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import app.sante.com.sante.model.Place;
+import app.sante.com.sante.VolleyCallback;
 import app.sante.com.sante.network.NetworkManager;
 import app.sante.com.sante.parser.PlaceParser;
 import app.sante.com.sante.util.URLConstants;
@@ -23,8 +23,8 @@ import app.sante.com.sante.util.URLConstants;
  */
 public final class PlacesAPI {
 
-
-    public static ArrayList<Place> getPlacesForLocation(Context mContext , String location){
+    private static ArrayList<app.sante.com.sante.model.Place> data ;
+    public static ArrayList<app.sante.com.sante.model.Place> getPlacesForLocation(Context mContext, String location, final VolleyCallback callback){
 
         String requestURL = URLConstants.BASE_URL + URLConstants.GET_LOCALE_PLACES + location + URLConstants.RESOURCE_FORMAT;
 
@@ -36,7 +36,9 @@ public final class PlacesAPI {
             public void onResponse(JSONObject response) {
 
                 Log.d("API-RESP",PlaceParser.parseGetPlacesRequest(response).toString());
-
+                data = PlaceParser.parseGetPlacesRequest(response);
+                callback.onSuccess(data);
+                Log.e("error",data.toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -47,10 +49,12 @@ public final class PlacesAPI {
             }
         });
 
+
+
         //Making network request
         NetworkManager.getInstance(mContext).getRequestQueue().add(jsonArrayRequest);
 
-        return null;
+        return data;
 
     }
 

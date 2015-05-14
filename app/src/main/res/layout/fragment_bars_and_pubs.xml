@@ -1,11 +1,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="app.sante.com.sante.view.acitivity.BarsAndPubsFragment">
+    tools:context="app.sante.com.sante.view.acitivity.BarsAndPubsFragment"
+    android:id = "@+id/barsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="bars_pubs" />
+        android:text="bars_pubs"
+        android:id ="@+id/txtBars"/>
+    <!--
     <ListView
         android:id="@+id/bars_pubs"
         android:layout_width="match_parent"
@@ -16,7 +19,7 @@
         android:dividerHeight="0dp"
         android:background="#fff"
         >
-        </ListView>
+        </ListView>-->
 
 
 </FrameLayout>

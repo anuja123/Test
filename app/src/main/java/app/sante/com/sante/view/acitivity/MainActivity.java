@@ -2,6 +2,7 @@ package app.sante.com.sante.view.acitivity;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -23,14 +24,20 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import app.sante.com.sante.R;
+import app.sante.com.sante.VolleyCallback;
 import app.sante.com.sante.api.PlacesAPI;
+import app.sante.com.sante.database.PubsHelper;
+import app.sante.com.sante.model.Place;
 import app.sante.com.sante.util.URLConstants;
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener,VolleyCallback {
     DrawerLayout mDrawerLayout;
-
+    public PubsHelper databaseHelper;
     private Fragment mFragment;
     ListView mDrawerList;
     private ViewPager viewPager ;
@@ -38,14 +45,15 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     ActionBarDrawerToggle mDrawerToggle;
     private Toolbar mToolBar;
     String mTitle = "";
-
+    ArrayList<Place> initPubs;
     //private TitleNavigationAdapter mTitleAdapter;
     //private TabsPagerAdapter mTabsAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        setContentView(R.layout.activity_main);
+        databaseHelper = new PubsHelper(MainActivity.this);
         viewPager = (ViewPager) findViewById(R.id.swipeTabs);
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mAdapter);
@@ -62,7 +70,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         actionBar.addTab(tab1);
     //2nd Tab for Night Clubs
-        ActionBar.Tab tab2 = actionBar.newTab().setText("Night Clubs").setTabListener(/*new TabListener<NightClubsFragment>(this,"night clubs",NightClubsFragment.class*/this);
+        ActionBar.Tab tab2 = actionBar.newTab().setText("Night Clubs").setTabListener(this);
 
         actionBar.addTab(tab2);
         //moveDrawerToTop();
@@ -94,10 +102,48 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         //Quick cheat: Add Fragment 1 to default view
         //onItemClick(null, null, 0, 0);
         makeNetworkRequest();
+
+
+
+    //    databaseHelper.savePubRecord(name,cstSymbol);
+
     }
 
     public void makeNetworkRequest() {
-        PlacesAPI.getPlacesForLocation(this, URLConstants.LOCALE_BLORE);
+        initPubs = new ArrayList<>();
+        initPubs = PlacesAPI.getPlacesForLocation(this, URLConstants.LOCALE_BLORE , new VolleyCallback() {
+            @Override
+            public void onSuccess(ArrayList<Place> result) {
+                System.out.println(".................." + result);
+                Place pl = result.get(0);
+                String name = pl.name ;
+                String cstSymbol = pl.costSymbol ;
+
+                System.out.println("!!!!!!!!!!!!!!!" + name + cstSymbol);
+                databaseHelper.savePubRecord(name,cstSymbol);
+                Cursor c = databaseHelper.getTimeRecordList();
+
+                //move cursor to first position
+                c.moveToFirst();
+                String name1=c.getString(0);
+
+               //BarsAndPubsFragment fragment_obj = (BarsAndPubsFragment)getSupportFragmentManager().findFragmentById(R.id.barsFragment);
+                BarsAndPubsFragment fragment_obj = new BarsAndPubsFragment();
+                if(getSupportFragmentManager() != null){
+                    /*fragment_obj = (BarsAndPubsFragment)
+                            getSupportFragmentManager().findFragmentById(R.id.barsFragment);*/
+                    fragment_obj.UpdateTextView(name1);
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "getSupportFragmentManager is null", Toast.LENGTH_SHORT).show();
+                }
+               // fragmentTransaction.add(R.id.barsFragment , fragment_obj);
+                Log.e("data",name1);
+                //fragment_obj.UpdateTextView(name1);
+            }
+        });
+//        System.out.-println(".................." + initPubs.get(0).toString());
+        //databaseHelper.savePubRecord(name,cstSymbol);
     }
 
 
@@ -215,6 +261,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         super.onPostCreate(savedInstance);
         mDrawerToggle.syncState();
     }
+
+    @Override
+    public void onSuccess(ArrayList<Place> result) {
+
+    }
+
 
     public static class PlaceholderFragment extends Fragment {
         public PlaceholderFragment(){

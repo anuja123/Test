@@ -10,6 +10,7 @@
     <string name="drawer_open">MainActivity</string>
     <string name="drawer_close">MainActivity</string>
     <string name="action_search">Search</string>
+    <string name="action_location_found">Location</string>
     <string-array name="Side_Menu">
         <item> Sign Up</item>
         <item> About Sante</item>

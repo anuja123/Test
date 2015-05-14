@@ -6,17 +6,22 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.FacebookSdk;
+import com.facebook.login.widget.LoginButton;
 import app.sante.com.sante.R;
 
 public class LoginActivity extends FragmentActivity implements View.OnClickListener{
     private TextView skip ;
+    private LoginButton fbLoginBtn;
+    //private UiLifecycleHelper uiHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         setContentView(R.layout.activity_login);
         skip = (TextView)findViewById(R.id.skip);
+        fbLoginBtn = (LoginButton)findViewById(R.id.connectWithFbButton);
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -25,6 +30,8 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
 
             }
         });
+
+        //fbLoginBtn.setUserInfoChangedCallBack()
 
 
     }
